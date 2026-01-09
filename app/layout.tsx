@@ -40,12 +40,21 @@ export const metadata: Metadata = {
     siteName: "Quantum Computing Roadmap",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "https://roadmap.quantumx.com/images/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Quantum Computing Roadmap 2026",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Quantum Computing Roadmap 2026",
     description: "A comprehensive learning roadmap for quantum computing from beginner to advanced. Free interactive guide.",
-    creator: "@quantumroadmap",
+    creator: "@_Quantum_X_",
+    images: ["https://roadmap.quantumx.com/images/logo.png"],
   },
   robots: {
     index: true,
@@ -60,10 +69,9 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/icon.png", type: "image/png" },
       { url: "/favicon.ico", type: "image/x-icon" },
     ],
-    apple: "/icon.png",
+    apple: "/favicon.ico",
     shortcut: "/favicon.ico",
   },
 };

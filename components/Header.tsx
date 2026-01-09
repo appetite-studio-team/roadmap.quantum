@@ -1,6 +1,6 @@
 'use client';
 
-import { Twitter, Linkedin } from 'lucide-react';
+import { Linkedin } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Header() {
@@ -10,10 +10,12 @@ export default function Header() {
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Left: Logo */}
           <div className="flex items-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/icon.png"
+              src="/images/logo.png"
               alt="Quantum Computing Roadmap"
-              className="w-8 h-8 sm:w-10 sm:h-10 object-contain flex-shrink-0"
+              className="w-8 h-8 sm:w-10 sm:h-10 object-contain flex-shrink-0 brightness-0 invert"
+              loading="eager"
             />
           </div>
           
@@ -31,10 +33,16 @@ export default function Header() {
               href="https://x.com/_Quantum_X_"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-gray-300 transition-colors"
-              aria-label="Twitter/X"
+              className="text-white hover:text-gray-300 transition-colors flex items-center"
+              aria-label="X (formerly Twitter)"
             >
-              <Twitter size={18} className="sm:w-5 sm:h-5" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/twitter.png"
+                alt="X (formerly Twitter)"
+                className="w-[18px] h-[18px] sm:w-5 sm:h-5 object-contain brightness-0 invert"
+                loading="eager"
+              />
             </Link>
             <Link
               href="https://www.linkedin.com/company/quantumx-foundation"

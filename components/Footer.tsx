@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { Github } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -15,11 +14,12 @@ export default function Footer() {
             <span className="text-gray-600 text-sm">{new Date().getFullYear()}</span>
             <span className="text-gray-400">•</span>
             <Link
-              href="#"
-              className="text-gray-600 hover:text-purple-600 transition-colors flex items-center space-x-1"
+              href="https://quantumx.foundation/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-600 hover:text-purple-600 transition-colors text-sm"
             >
-              <Github size={16} />
-              <span className="text-sm">GitHub</span>
+              QuantumX
             </Link>
           </div>
         </div>
