@@ -100,7 +100,7 @@ export default function PhaseModal({ isOpen, onClose, phase }: PhaseModalProps) 
                 <div className="mt-6 flex justify-end">
                   <button
                     type="button"
-                    className="px-6 py-2 glass-pill text-white hover:bg-white/15 transition-all font-medium rounded-lg shadow-[0_4px_16px_0_rgba(139,92,246,0.3)] hover:shadow-[0_4px_20px_0_rgba(139,92,246,0.4)]"
+                    className="px-6 py-2 glass-pill text-white hover:bg-white/15 transition-all font-medium rounded-lg shadow-[0_4px_16px_0_rgba(255,255,255,0.2)] hover:shadow-[0_4px_20px_0_rgba(255,255,255,0.3)]"
                     onClick={onClose}
                   >
                     Continue learning
