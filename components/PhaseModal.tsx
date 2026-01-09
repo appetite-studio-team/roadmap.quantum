@@ -75,7 +75,7 @@ export default function PhaseModal({ isOpen, onClose, phase }: PhaseModalProps) 
 
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-3">
-                      What you'll learn in this phase:
+                      What you&apos;ll learn in this phase:
                     </h4>
                     <div className="space-y-3">
                       {phase.categories.map((category) => (
