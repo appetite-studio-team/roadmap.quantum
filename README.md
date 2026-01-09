@@ -2,6 +2,10 @@
 
 An interactive, scrollable web application that presents a comprehensive learning roadmap for quantum computing, guiding learners from absolute beginner to advanced mastery.
 
+## Contributing
+
+🤝 We welcome contributions! If you'd like to improve this roadmap, add new content, fix issues, or suggest enhancements, please reach out to us at **[hi@quantumx.foundation](mailto:hi@quantumx.foundation)**. Your input helps make quantum computing education more accessible to everyone.
+
 ## Features
 
 - **9 Learning Phases**: From foundations to career paths
@@ -102,6 +106,3 @@ This roadmap is designed to be:
 ## License
 
 This project is open source and available for educational purposes.
-
-# roadmap.quantum
-# roadmap.quantum
