@@ -11,7 +11,7 @@ interface RoadmapCanvasProps {
 
 export default function RoadmapCanvas({ phases, onNodeClick, onPhaseClick }: RoadmapCanvasProps) {
   return (
-    <div className="min-h-screen roadmap-background py-6 sm:py-8 lg:py-12">
+    <div className="min-h-screen roadmap-background py-6 sm:py-8 lg:py-12 relative">
       {phases.map((phase, index) => (
         <PhaseSection
           key={phase.phaseId}

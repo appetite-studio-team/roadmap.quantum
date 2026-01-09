@@ -11,10 +11,6 @@ interface NodeCardProps {
 }
 
 export default function NodeCard({ node, onClick, index, variant = 'yellow' }: NodeCardProps) {
-  const bgColor = variant === 'yellow' 
-    ? 'bg-yellow-50 border-yellow-200 hover:border-yellow-300' 
-    : 'bg-blue-50 border-blue-200 hover:border-blue-300';
-  
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -25,12 +21,12 @@ export default function NodeCard({ node, onClick, index, variant = 'yellow' }: N
     >
       <button
         onClick={onClick}
-        className={`group relative ${bgColor} rounded-xl border-2 p-2 sm:p-3 md:p-4 hover:shadow-lg transition-all text-left cursor-pointer min-w-[140px] sm:min-w-[180px] max-w-[180px] sm:max-w-[220px] shadow-sm`}
+        className="group relative glass-pill rounded-xl p-2 sm:p-3 md:p-4 glass-hover text-left cursor-pointer min-w-[140px] sm:min-w-[180px] max-w-[180px] sm:max-w-[220px] shadow-[0_4px_16px_0_rgba(0,0,0,0.2)]"
       >
-        <h3 className="font-semibold text-gray-900 text-sm mb-1 group-hover:text-gray-800 transition-colors">
+        <h3 className="font-semibold text-white text-sm mb-1 group-hover:text-white/90 transition-colors">
           {node.nodeTitle}
         </h3>
-        <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+        <p className="text-xs text-white/60 line-clamp-2 leading-relaxed">
           {node.nodeDescription}
         </p>
       </button>

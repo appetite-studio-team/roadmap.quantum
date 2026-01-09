@@ -20,17 +20,17 @@ export default function PhaseCard({ phase, onPhaseClick, index }: PhaseCardProps
     >
       <button
         onClick={onPhaseClick}
-        className="group relative bg-gray-800 rounded-xl border-2 border-gray-700 p-3 sm:p-4 md:p-5 hover:border-gray-600 hover:shadow-xl transition-all text-left cursor-pointer min-w-[160px] sm:min-w-[200px] max-w-[240px] sm:max-w-[280px] shadow-lg"
+        className="group relative glass rounded-2xl p-3 sm:p-4 md:p-5 glass-hover text-left cursor-pointer min-w-[160px] sm:min-w-[200px] max-w-[240px] sm:max-w-[280px] shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]"
       >
         <div className="flex items-center space-x-2 mb-2">
-          <span className="text-white text-xs font-bold bg-gray-700 px-2 py-1 rounded">
+          <span className="text-white text-xs font-bold glass-pill px-2 py-1 rounded-lg">
             Phase {phase.phaseId}
           </span>
         </div>
-        <h2 className="font-bold text-white text-base mb-1 group-hover:text-gray-100 transition-colors">
+        <h2 className="font-bold text-white text-base mb-1 group-hover:text-white/90 transition-colors">
           {phase.title}
         </h2>
-        <p className="text-xs text-gray-300 line-clamp-2 leading-relaxed">
+        <p className="text-xs text-white/70 line-clamp-2 leading-relaxed">
           {phase.description}
         </p>
       </button>

@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-gray-900 shadow-lg">
+    <header className="sticky top-0 z-50 glass-strong border-b border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Left: Logo */}
@@ -33,7 +33,7 @@ export default function Header() {
               href="https://x.com/_Quantum_X_"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-gray-300 transition-colors flex items-center"
+              className="text-white/80 hover:text-white transition-colors flex items-center"
               aria-label="X (formerly Twitter)"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -48,7 +48,7 @@ export default function Header() {
               href="https://www.linkedin.com/company/quantumx-foundation"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-gray-300 transition-colors"
+              className="text-white/80 hover:text-white transition-colors"
               aria-label="LinkedIn"
             >
               <Linkedin size={18} className="sm:w-5 sm:h-5" />

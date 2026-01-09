@@ -60,13 +60,13 @@ export default function FAQ() {
   };
 
   return (
-    <section className="bg-white py-16">
+    <section className="py-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <h2 className="text-3xl font-bold text-white mb-2">
             Frequently Asked Questions
           </h2>
-          <p className="text-gray-600">
+          <p className="text-white/70">
             Common questions about quantum computing and this learning roadmap
           </p>
         </div>
@@ -75,13 +75,13 @@ export default function FAQ() {
           {faqData.map((faq, index) => (
             <div
               key={index}
-              className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden"
+              className="glass rounded-xl overflow-hidden shadow-[0_4px_16px_0_rgba(0,0,0,0.2)]"
             >
               <button
                 onClick={() => toggleQuestion(index)}
-                className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+                className="w-full px-6 py-4 flex items-center justify-between text-left glass-hover transition-all"
               >
-                <span className="font-semibold text-gray-900 pr-4">
+                <span className="font-semibold text-white pr-4">
                   {faq.question}
                 </span>
                 <motion.div
@@ -89,7 +89,7 @@ export default function FAQ() {
                   transition={{ duration: 0.2 }}
                   className="flex-shrink-0"
                 >
-                  <ChevronDown size={20} className="text-gray-500" />
+                  <ChevronDown size={20} className="text-white/60" />
                 </motion.div>
               </button>
 
@@ -103,7 +103,7 @@ export default function FAQ() {
                     className="overflow-hidden"
                   >
                     <div className="px-6 pb-4 pt-2">
-                      <p className="text-gray-700 leading-relaxed">
+                      <p className="text-white/80 leading-relaxed">
                         {faq.answer}
                       </p>
                     </div>

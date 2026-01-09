@@ -89,7 +89,7 @@ export default function PhaseSection({ phase, onNodeClick, onPhaseClick, phaseIn
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="relative mb-16 sm:mb-24 lg:mb-32 py-6 sm:py-8 lg:py-12"
+      className="relative mb-16 sm:mb-24 lg:mb-32 py-6 sm:py-8 lg:py-12 z-10"
       ref={containerRef}
     >
       {/* SVG for connection lines */}
@@ -105,11 +105,12 @@ export default function PhaseSection({ phase, onNodeClick, onPhaseClick, phaseIn
               <path
                 key={`conn-${idx}`}
                 d={`M ${conn.fromX} ${conn.fromY} Q ${midX} ${controlY} ${conn.toX} ${conn.toY}`}
-                stroke="#9ca3af"
-                strokeWidth="2.5"
+                stroke="rgba(255, 255, 255, 0.3)"
+                strokeWidth="2"
                 fill="none"
-                strokeDasharray="4,3"
-                className="opacity-80"
+                strokeDasharray="4,4"
+                className="opacity-60"
+                style={{ filter: 'blur(0.5px)' }}
               />
             );
           })}
