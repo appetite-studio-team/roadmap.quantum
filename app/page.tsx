@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Script from 'next/script';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import RoadmapCanvas from '@/components/RoadmapCanvas';
@@ -16,6 +18,7 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPhase, setSelectedPhase] = useState<Phase | null>(null);
   const [isPhaseModalOpen, setIsPhaseModalOpen] = useState(false);
+  const roadmapRef = useRef<HTMLDivElement>(null);
 
   const handleNodeClick = (node: Node) => {
     setSelectedNode(node);
@@ -35,6 +38,50 @@ export default function Home() {
   const handleClosePhaseModal = () => {
     setIsPhaseModalOpen(false);
     setSelectedPhase(null);
+  };
+
+  const handleDownloadPDF = async () => {
+    if (!roadmapRef.current) return;
+
+    try {
+      // Close any open modals before capturing
+      setIsModalOpen(false);
+      setIsPhaseModalOpen(false);
+      
+      // Wait a bit for modals to close
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      // Capture the roadmap canvas
+      const canvas = await html2canvas(roadmapRef.current, {
+        backgroundColor: '#000000',
+        scale: 2,
+        logging: false,
+        useCORS: true,
+        windowWidth: roadmapRef.current.scrollWidth,
+        windowHeight: roadmapRef.current.scrollHeight,
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      
+      // Calculate PDF dimensions
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const pdfWidth = imgWidth * 0.264583; // Convert px to mm (1px = 0.264583mm at 96dpi)
+      const pdfHeight = imgHeight * 0.264583;
+      
+      // Create PDF
+      const pdf = new jsPDF({
+        orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+        unit: 'mm',
+        format: [pdfWidth, pdfHeight],
+      });
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('Quantum-Computing-Roadmap-2026.pdf');
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    }
   };
 
   const structuredData = {
@@ -77,9 +124,10 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <Header />
+      <Header onDownloadPDF={handleDownloadPDF} />
       <main className="flex-1">
         <RoadmapCanvas
+          ref={roadmapRef}
           phases={roadmapData}
           onNodeClick={handleNodeClick}
           onPhaseClick={handlePhaseClick}

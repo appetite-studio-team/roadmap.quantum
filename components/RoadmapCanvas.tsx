@@ -1,5 +1,6 @@
 'use client';
 
+import { forwardRef } from 'react';
 import { Phase, Node } from '@/data/roadmap';
 import PhaseSection from './PhaseSection';
 
@@ -9,19 +10,25 @@ interface RoadmapCanvasProps {
   onPhaseClick?: (phase: Phase) => void;
 }
 
-export default function RoadmapCanvas({ phases, onNodeClick, onPhaseClick }: RoadmapCanvasProps) {
-  return (
-    <div className="min-h-screen roadmap-background py-6 sm:py-8 lg:py-12 relative">
-      {phases.map((phase, index) => (
-        <PhaseSection
-          key={phase.phaseId}
-          phase={phase}
-          onNodeClick={onNodeClick}
-          onPhaseClick={onPhaseClick}
-          phaseIndex={index}
-        />
-      ))}
-    </div>
-  );
-}
+const RoadmapCanvas = forwardRef<HTMLDivElement, RoadmapCanvasProps>(
+  ({ phases, onNodeClick, onPhaseClick }, ref) => {
+    return (
+      <div ref={ref} className="min-h-screen roadmap-background py-6 sm:py-8 lg:py-12 relative">
+        {phases.map((phase, index) => (
+          <PhaseSection
+            key={phase.phaseId}
+            phase={phase}
+            onNodeClick={onNodeClick}
+            onPhaseClick={onPhaseClick}
+            phaseIndex={index}
+          />
+        ))}
+      </div>
+    );
+  }
+);
+
+RoadmapCanvas.displayName = 'RoadmapCanvas';
+
+export default RoadmapCanvas;
 

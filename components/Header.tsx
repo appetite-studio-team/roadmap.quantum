@@ -1,9 +1,13 @@
 'use client';
 
-import { Linkedin } from 'lucide-react';
+import { Linkedin, Download } from 'lucide-react';
 import Link from 'next/link';
 
-export default function Header() {
+interface HeaderProps {
+  onDownloadPDF?: () => void;
+}
+
+export default function Header({ onDownloadPDF }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 glass-strong border-b border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
@@ -27,8 +31,19 @@ export default function Header() {
             </h1>
           </div>
           
-          {/* Right: Social Icons - Responsive sizing and spacing */}
+          {/* Right: Download Button and Social Icons */}
           <div className="flex items-center space-x-2 sm:space-x-3">
+            {onDownloadPDF && (
+              <button
+                onClick={onDownloadPDF}
+                className="flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white text-black rounded-lg hover:bg-white/90 transition-all font-medium text-xs sm:text-sm shadow-[0_2px_8px_0_rgba(255,255,255,0.3)]"
+                aria-label="Download PDF"
+              >
+                <Download size={14} className="sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Download PDF</span>
+                <span className="sm:hidden">PDF</span>
+              </button>
+            )}
             <Link
               href="https://x.com/_Quantum_X_"
               target="_blank"
