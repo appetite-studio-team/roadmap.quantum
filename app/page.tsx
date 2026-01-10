@@ -51,32 +51,85 @@ export default function Home() {
       // Wait a bit for modals to close
       await new Promise(resolve => setTimeout(resolve, 300));
 
-      // Capture the roadmap canvas
-      const canvas = await html2canvas(roadmapRef.current, {
-        backgroundColor: '#000000',
+      // Store current scroll position
+      const originalScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const originalScrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+      const element = roadmapRef.current;
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      // Store original styles
+      const originalStyles = {
+        height: element.style.height,
+        maxHeight: element.style.maxHeight,
+        overflow: element.style.overflow,
+        position: element.style.position,
+      };
+
+      // Get full content height
+      const fullHeight = element.scrollHeight;
+      const fullWidth = element.scrollWidth || element.offsetWidth;
+
+      // Temporarily expand element to show all content
+      element.style.height = `${fullHeight}px`;
+      element.style.maxHeight = 'none';
+      element.style.overflow = 'visible';
+      element.style.position = 'relative';
+
+      // Force reflow
+      void element.offsetHeight;
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Capture the entire expanded element
+      const canvas = await html2canvas(element, {
         scale: 2,
         logging: false,
         useCORS: true,
-        windowWidth: roadmapRef.current.scrollWidth,
-        windowHeight: roadmapRef.current.scrollHeight,
-      });
+        allowTaint: true,
+        // backgroundColor is supported at runtime but not in TypeScript types
+        backgroundColor: '#000000',
+      } as any);
 
-      const imgData = canvas.toDataURL('image/png');
-      
+      // Restore original styles
+      element.style.height = originalStyles.height || '';
+      element.style.maxHeight = originalStyles.maxHeight || '';
+      element.style.overflow = originalStyles.overflow || '';
+      element.style.position = originalStyles.position || '';
+
+      const imgData = canvas.toDataURL('image/png', 1.0);
+
+      // Restore original scroll position
+      window.scrollTo(originalScrollLeft, originalScrollTop);
+
       // Calculate PDF dimensions
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
-      const pdfWidth = imgWidth * 0.264583; // Convert px to mm (1px = 0.264583mm at 96dpi)
+      const pdfWidth = imgWidth * 0.264583; // Convert px to mm
       const pdfHeight = imgHeight * 0.264583;
+      
+      // Use A4 width (210mm) and scale height proportionally
+      const maxPdfWidth = 210; // A4 width in mm
+      let finalPdfWidth = pdfWidth;
+      let finalPdfHeight = pdfHeight;
+      
+      if (pdfWidth > maxPdfWidth) {
+        const ratio = maxPdfWidth / pdfWidth;
+        finalPdfWidth = maxPdfWidth;
+        finalPdfHeight = pdfHeight * ratio;
+      }
       
       // Create PDF
       const pdf = new jsPDF({
-        orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+        orientation: finalPdfWidth > finalPdfHeight ? 'landscape' : 'portrait',
         unit: 'mm',
-        format: [pdfWidth, pdfHeight],
+        format: [finalPdfWidth, finalPdfHeight],
       });
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.addImage(imgData, 'PNG', 0, 0, finalPdfWidth, finalPdfHeight);
+
       pdf.save('Quantum-Computing-Roadmap-2026.pdf');
     } catch (error) {
       console.error('Error generating PDF:', error);
