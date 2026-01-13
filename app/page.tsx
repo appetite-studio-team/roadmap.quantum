@@ -1,9 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import Script from 'next/script';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import RoadmapCanvas from '@/components/RoadmapCanvas';
@@ -18,7 +16,6 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPhase, setSelectedPhase] = useState<Phase | null>(null);
   const [isPhaseModalOpen, setIsPhaseModalOpen] = useState(false);
-  const roadmapRef = useRef<HTMLDivElement>(null);
 
   const handleNodeClick = (node: Node) => {
     setSelectedNode(node);
@@ -40,101 +37,14 @@ export default function Home() {
     setSelectedPhase(null);
   };
 
-  const handleDownloadPDF = async () => {
-    if (!roadmapRef.current) return;
-
-    try {
-      // Close any open modals before capturing
-      setIsModalOpen(false);
-      setIsPhaseModalOpen(false);
-      
-      // Wait a bit for modals to close
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      // Store current scroll position
-      const originalScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const originalScrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-
-      const element = roadmapRef.current;
-      
-      // Scroll to top
-      window.scrollTo(0, 0);
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      // Store original styles
-      const originalStyles = {
-        height: element.style.height,
-        maxHeight: element.style.maxHeight,
-        overflow: element.style.overflow,
-        position: element.style.position,
-      };
-
-      // Get full content height
-      const fullHeight = element.scrollHeight;
-      const fullWidth = element.scrollWidth || element.offsetWidth;
-
-      // Temporarily expand element to show all content
-      element.style.height = `${fullHeight}px`;
-      element.style.maxHeight = 'none';
-      element.style.overflow = 'visible';
-      element.style.position = 'relative';
-
-      // Force reflow
-      void element.offsetHeight;
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Capture the entire expanded element
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
-        // backgroundColor is supported at runtime but not in TypeScript types
-        backgroundColor: '#000000',
-      } as any);
-
-      // Restore original styles
-      element.style.height = originalStyles.height || '';
-      element.style.maxHeight = originalStyles.maxHeight || '';
-      element.style.overflow = originalStyles.overflow || '';
-      element.style.position = originalStyles.position || '';
-
-      const imgData = canvas.toDataURL('image/png', 1.0);
-
-      // Restore original scroll position
-      window.scrollTo(originalScrollLeft, originalScrollTop);
-
-      // Calculate PDF dimensions
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const pdfWidth = imgWidth * 0.264583; // Convert px to mm
-      const pdfHeight = imgHeight * 0.264583;
-      
-      // Use A4 width (210mm) and scale height proportionally
-      const maxPdfWidth = 210; // A4 width in mm
-      let finalPdfWidth = pdfWidth;
-      let finalPdfHeight = pdfHeight;
-      
-      if (pdfWidth > maxPdfWidth) {
-        const ratio = maxPdfWidth / pdfWidth;
-        finalPdfWidth = maxPdfWidth;
-        finalPdfHeight = pdfHeight * ratio;
-      }
-      
-      // Create PDF
-      const pdf = new jsPDF({
-        orientation: finalPdfWidth > finalPdfHeight ? 'landscape' : 'portrait',
-        unit: 'mm',
-        format: [finalPdfWidth, finalPdfHeight],
-      });
-
-      pdf.addImage(imgData, 'PNG', 0, 0, finalPdfWidth, finalPdfHeight);
-
-      pdf.save('Quantum-Computing-Roadmap-2026.pdf');
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('Failed to generate PDF. Please try again.');
-    }
+  const handleDownloadPDF = () => {
+    // Create a temporary anchor element to trigger download
+    const link = document.createElement('a');
+    link.href = '/pdf/Quantum-Computing-Roadmap-2026.pdf';
+    link.download = 'Quantum-Computing-Roadmap-2026.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const structuredData = {
@@ -180,7 +90,6 @@ export default function Home() {
       <Header onDownloadPDF={handleDownloadPDF} />
       <main className="flex-1">
         <RoadmapCanvas
-          ref={roadmapRef}
           phases={roadmapData}
           onNodeClick={handleNodeClick}
           onPhaseClick={handlePhaseClick}
