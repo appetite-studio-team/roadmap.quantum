@@ -1,13 +1,24 @@
 'use client';
 
+import { useMemo } from 'react';
 import { Linkedin, Download } from 'lucide-react';
 import Link from 'next/link';
+import { useProgress } from '@/context/ProgressContext';
+import { roadmapData } from '@/data/roadmap';
 
 interface HeaderProps {
   onDownloadPDF?: () => void;
 }
 
+const TOTAL_TOPICS = roadmapData.reduce(
+  (sum, phase) => sum + phase.categories.reduce((s, c) => s + c.topics.length, 0),
+  0,
+);
+
 export default function Header({ onDownloadPDF }: HeaderProps) {
+  const { completedCount } = useProgress();
+  const percent = useMemo(() => Math.round((completedCount / TOTAL_TOPICS) * 100), [completedCount]);
+
   return (
     <header className="sticky top-0 z-50 glass-strong border-b border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
@@ -23,12 +34,25 @@ export default function Header({ onDownloadPDF }: HeaderProps) {
             />
           </div>
           
-          {/* Center: Main Title - Responsive sizing */}
-          <div className="flex-1 flex justify-center sm:justify-center">
-            <h1 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white text-center px-2">
+          {/* Center: Title + Progress */}
+          <div className="flex-1 flex flex-col items-center justify-center px-2">
+            <h1 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white text-center">
               <span className="hidden sm:inline">Quantum Computing Roadmap 2026</span>
               <span className="sm:hidden">QC Roadmap 2026</span>
             </h1>
+            {completedCount > 0 && (
+              <div className="flex items-center gap-2 mt-0.5 w-full max-w-[220px] sm:max-w-xs">
+                <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-purple-500 to-green-400 transition-all duration-500 ease-out"
+                    style={{ width: `${percent}%` }}
+                  />
+                </div>
+                <span className="text-[10px] sm:text-xs text-white/50 font-medium tabular-nums whitespace-nowrap">
+                  {completedCount}/{TOTAL_TOPICS}
+                </span>
+              </div>
+            )}
           </div>
           
           {/* Right: Download Button and Social Icons */}
