@@ -113,7 +113,7 @@ export default function EmailModal({ isOpen, onClose, onSuccess }: EmailModalPro
                 </form>
 
                 <p className="text-white/40 text-xs mt-4 text-center">
-                  We will not spam you. Your email is only used to deliver the PDF.
+                  We will not spam you.
                 </p>
               </Dialog.Panel>
             </Transition.Child>
