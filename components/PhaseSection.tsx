@@ -1,10 +1,11 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Phase, Node, Category } from '@/data/roadmap';
+import { Phase, Node } from '@/data/roadmap';
 import CategoryCard from './CategoryCard';
 import PhaseCard from './PhaseCard';
+import { useProgress } from '@/context/ProgressContext';
 
 interface PhaseSectionProps {
   phase: Phase;
@@ -21,10 +22,35 @@ interface Connection {
 }
 
 export default function PhaseSection({ phase, onNodeClick, onPhaseClick, phaseIndex }: PhaseSectionProps) {
+  const { isCompleted } = useProgress();
   const containerRef = useRef<HTMLDivElement>(null);
   const phaseCardRef = useRef<HTMLDivElement>(null);
   const categoryRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [connections, setConnections] = useState<Connection[]>([]);
+
+  const { completedInPhase, totalInPhase, completedHoursInPhase, totalHoursInPhase } = useMemo(() => {
+    let completed = 0;
+    let total = 0;
+    let completedH = 0;
+    let totalH = 0;
+    phase.categories.forEach((cat) => {
+      cat.topics.forEach((topic) => {
+        total += 1;
+        const h = topic.estimatedHours ?? 1;
+        totalH += h;
+        if (isCompleted(topic.nodeId)) {
+          completed += 1;
+          completedH += h;
+        }
+      });
+    });
+    return {
+      completedInPhase: completed,
+      totalInPhase: total,
+      completedHoursInPhase: completedH,
+      totalHoursInPhase: totalH,
+    };
+  }, [phase, isCompleted]);
 
   useEffect(() => {
     const updateConnections = () => {
@@ -121,10 +147,14 @@ export default function PhaseSection({ phase, onNodeClick, onPhaseClick, phaseIn
         {/* Central Phase Card */}
         <div className="flex justify-center mb-6 sm:mb-8 lg:mb-12">
           <div ref={phaseCardRef}>
-            <PhaseCard 
-              phase={phase} 
+            <PhaseCard
+              phase={phase}
               index={phaseIndex}
               onPhaseClick={() => onPhaseClick?.(phase)}
+              completedInPhase={completedInPhase}
+              totalInPhase={totalInPhase}
+              completedHoursInPhase={completedHoursInPhase}
+              totalHoursInPhase={totalHoursInPhase}
             />
           </div>
         </div>

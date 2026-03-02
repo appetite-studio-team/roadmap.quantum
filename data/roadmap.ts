@@ -11,6 +11,8 @@ export interface Node {
   whyItMatters: string;
   whatToLearn: string;
   resources: Resource[];
+  /** Estimated study time in hours; default 1 in UI if omitted */
+  estimatedHours?: number;
 }
 
 export interface Category {
