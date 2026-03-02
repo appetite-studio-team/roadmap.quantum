@@ -1,0 +1,21 @@
+{
+  "name": "Quantum Computing Roadmap 2026",
+  "short_name": "QC Roadmap",
+  "description": "A comprehensive, structured learning roadmap for quantum computing from beginner to advanced.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
