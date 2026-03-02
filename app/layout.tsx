@@ -5,7 +5,10 @@ import "./globals.css";
 const GA_ID = "G-392XQM7Y2Q";
 
 export const metadata: Metadata = {
-  title: "Quantum Computing Roadmap 2026 | Learn Quantum Computing from Beginner to Advanced",
+  title: {
+    default: "Quantum Computing Roadmap 2026 | Learn Quantum Computing from Beginner to Advanced",
+    template: "%s | Quantum Computing Roadmap",
+  },
   description: "A comprehensive, structured learning roadmap for quantum computing. Master quantum computing from foundations to advanced topics. Perfect for students, developers, researchers, and engineers. Free interactive guide with 9 learning phases covering qubits, algorithms, programming, and applications.",
   keywords: [
     "quantum computing",
@@ -22,11 +25,17 @@ export const metadata: Metadata = {
     "quantum computing guide",
     "quantum mechanics",
     "quantum computing education",
-    "quantum computing career"
+    "quantum computing career",
+    "quantum computing 2026",
+    "free quantum computing course",
+    "quantum computing learning path",
+    "quantum hardware",
+    "quantum error correction",
   ],
   authors: [{ name: "Quantum Computing Roadmap" }],
   creator: "Quantum Computing Roadmap",
   publisher: "Quantum Computing Roadmap",
+  category: "Education",
   formatDetection: {
     email: false,
     address: false,
@@ -76,6 +85,10 @@ export const metadata: Metadata = {
     ],
     apple: "/favicon.ico",
     shortcut: "/favicon.ico",
+  },
+  manifest: "/manifest.json",
+  other: {
+    "theme-color": "#000000",
   },
 };
 
