@@ -2,8 +2,9 @@
 
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { X, ExternalLink } from 'lucide-react';
+import { X, ExternalLink, CheckCircle2, Circle } from 'lucide-react';
 import { Node } from '@/data/roadmap';
+import { useProgress } from '@/context/ProgressContext';
 
 interface ModalProps {
   isOpen: boolean;
@@ -12,7 +13,11 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, node }: ModalProps) {
+  const { isCompleted, toggleTopic } = useProgress();
+
   if (!node) return null;
+
+  const completed = isCompleted(node.nodeId);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -107,13 +112,18 @@ export default function Modal({ isOpen, onClose, node }: ModalProps) {
                   )}
                 </div>
 
-                <div className="mt-6 flex justify-end">
+                <div className="mt-6 flex items-center justify-between">
                   <button
                     type="button"
-                    className="px-6 py-2 glass-pill text-white hover:bg-white/15 transition-all font-medium rounded-lg shadow-[0_4px_16px_0_rgba(255,255,255,0.2)] hover:shadow-[0_4px_20px_0_rgba(255,255,255,0.3)]"
-                    onClick={onClose}
+                    onClick={() => toggleTopic(node.nodeId)}
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all font-medium text-sm ${
+                      completed
+                        ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                        : 'glass-pill text-white/70 hover:text-white hover:bg-white/10'
+                    }`}
                   >
-                    Continue learning
+                    {completed ? <CheckCircle2 size={18} /> : <Circle size={18} />}
+                    <span>{completed ? 'Completed' : 'Mark as completed'}</span>
                   </button>
                 </div>
               </Dialog.Panel>

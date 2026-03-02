@@ -9,6 +9,7 @@ import FAQ from '@/components/FAQ';
 import Modal from '@/components/Modal';
 import PhaseModal from '@/components/PhaseModal';
 import EmailModal from '@/components/EmailModal';
+import { ProgressProvider } from '@/context/ProgressContext';
 import { roadmapData } from '@/data/roadmap';
 import { Node, Phase } from '@/data/roadmap';
 
@@ -87,6 +88,7 @@ export default function Home() {
   };
 
   return (
+    <ProgressProvider>
     <div className="min-h-screen flex flex-col bg-black">
       <Script
         id="structured-data"
@@ -119,6 +121,7 @@ export default function Home() {
         onSuccess={triggerPDFDownload}
       />
     </div>
+    </ProgressProvider>
   );
 }
 
