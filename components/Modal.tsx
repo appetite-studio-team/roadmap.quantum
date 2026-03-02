@@ -13,7 +13,7 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, node }: ModalProps) {
-  const { isCompleted, toggleTopic, hasEmail, saveEmail } = useProgress();
+  const { isCompleted, toggleTopic, hasEmail, saveEmail, getNote, setNote } = useProgress();
   const [showEmailPrompt, setShowEmailPrompt] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -142,6 +142,17 @@ export default function Modal({ isOpen, onClose, node }: ModalProps) {
                       </div>
                     </div>
                   )}
+
+                  <div>
+                    <h4 className="font-semibold text-white mb-2">Notes</h4>
+                    <textarea
+                      value={getNote(node.nodeId)}
+                      onChange={(e) => setNote(node.nodeId, e.target.value)}
+                      placeholder="Add your notes for this topic..."
+                      rows={3}
+                      className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all text-sm resize-y min-h-[80px]"
+                    />
+                  </div>
                 </div>
 
                 {showEmailPrompt ? (

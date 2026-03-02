@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import RoadmapCanvas from '@/components/RoadmapCanvas';
+import SearchBar from '@/components/SearchBar';
 import FAQ from '@/components/FAQ';
 import Modal from '@/components/Modal';
 import PhaseModal from '@/components/PhaseModal';
@@ -12,6 +13,16 @@ import EmailModal from '@/components/EmailModal';
 import { ProgressProvider, useProgress } from '@/context/ProgressContext';
 import { roadmapData } from '@/data/roadmap';
 import { Node, Phase } from '@/data/roadmap';
+import { triggerCelebration } from '@/lib/celebration';
+import { filterPhases } from '@/lib/filterRoadmap';
+
+const TOTAL_TOPICS = roadmapData.reduce(
+  (sum, p) => sum + p.categories.reduce((s, c) => s + c.topics.length, 0),
+  0,
+);
+const PHASE_TOPIC_IDS = roadmapData.map((p) =>
+  p.categories.flatMap((c) => c.topics.map((t) => t.nodeId)),
+);
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -166,6 +177,16 @@ function HomeContent() {
   const [selectedPhase, setSelectedPhase] = useState<Phase | null>(null);
   const [isPhaseModalOpen, setIsPhaseModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [appliedFilter, setAppliedFilter] = useState({ query: '', phaseId: '' });
+
+  const filteredPhases = useMemo(
+    () => filterPhases(roadmapData, appliedFilter.query, appliedFilter.phaseId),
+    [appliedFilter.query, appliedFilter.phaseId],
+  );
+
+  const handleFilterChange = useCallback((query: string, phaseId: string) => {
+    setAppliedFilter({ query, phaseId });
+  }, []);
 
   const handleNodeClick = (node: Node) => {
     setSelectedNode(node);
@@ -218,9 +239,10 @@ function HomeContent() {
         dangerouslySetInnerHTML={{ __html: structuredDataJson }}
       />
       <Header onDownloadPDF={handleDownloadPDF} />
+      <SearchBar phases={roadmapData} onFilterChange={handleFilterChange} />
       <main className="flex-1">
         <RoadmapCanvas
-          phases={roadmapData}
+          phases={filteredPhases}
           onNodeClick={handleNodeClick}
           onPhaseClick={handlePhaseClick}
         />
@@ -249,7 +271,11 @@ function HomeContent() {
 
 export default function Home() {
   return (
-    <ProgressProvider>
+    <ProgressProvider
+      totalTopics={TOTAL_TOPICS}
+      phaseTopicIds={PHASE_TOPIC_IDS}
+      onMilestone={triggerCelebration}
+    >
       <HomeContent />
     </ProgressProvider>
   );
