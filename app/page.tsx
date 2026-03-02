@@ -8,6 +8,7 @@ import RoadmapCanvas from '@/components/RoadmapCanvas';
 import FAQ from '@/components/FAQ';
 import Modal from '@/components/Modal';
 import PhaseModal from '@/components/PhaseModal';
+import EmailModal from '@/components/EmailModal';
 import { roadmapData } from '@/data/roadmap';
 import { Node, Phase } from '@/data/roadmap';
 
@@ -16,6 +17,7 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPhase, setSelectedPhase] = useState<Phase | null>(null);
   const [isPhaseModalOpen, setIsPhaseModalOpen] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
   const handleNodeClick = (node: Node) => {
     setSelectedNode(node);
@@ -38,7 +40,11 @@ export default function Home() {
   };
 
   const handleDownloadPDF = () => {
-    // Create a temporary anchor element to trigger download
+    setIsEmailModalOpen(true);
+  };
+
+  const triggerPDFDownload = () => {
+    setIsEmailModalOpen(false);
     const link = document.createElement('a');
     link.href = '/pdf/Quantum-Computing-Roadmap-2026.pdf';
     link.download = 'Quantum-Computing-Roadmap-2026.pdf';
@@ -106,6 +112,11 @@ export default function Home() {
         isOpen={isPhaseModalOpen}
         onClose={handleClosePhaseModal}
         phase={selectedPhase}
+      />
+      <EmailModal
+        isOpen={isEmailModalOpen}
+        onClose={() => setIsEmailModalOpen(false)}
+        onSuccess={triggerPDFDownload}
       />
     </div>
   );
