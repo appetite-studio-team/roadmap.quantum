@@ -2,48 +2,64 @@
 
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { X, Mail, Download } from 'lucide-react';
+import { X, Mail, Download, CheckCircle2 } from 'lucide-react';
+
+type Variant = 'pdf-download' | 'mark-completed';
 
 interface EmailModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (email: string) => void;
+  variant?: Variant;
+  zClass?: string;
 }
 
-export default function EmailModal({ isOpen, onClose, onSuccess }: EmailModalProps) {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
-  const [errorMsg, setErrorMsg] = useState('');
+const COPY: Record<Variant, { title: string; description: string; button: string }> = {
+  'pdf-download': {
+    title: 'Download Roadmap PDF',
+    description: 'Enter your email to download the Quantum Computing Roadmap 2026 as a PDF.',
+    button: 'Download PDF',
+  },
+  'mark-completed': {
+    title: 'Track Your Progress',
+    description: 'Enter your email to start tracking your learning progress across sessions.',
+    button: 'Continue',
+  },
+};
 
-  const handleSubmit = async (e: React.FormEvent) => {
+export default function EmailModal({
+  isOpen,
+  onClose,
+  onSuccess,
+  variant = 'pdf-download',
+  zClass = 'z-50',
+}: EmailModalProps) {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'submitting'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+  const copy = COPY[variant];
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('submitting');
     setErrorMsg('');
 
-    try {
-      const body = new URLSearchParams({
-        'form-name': 'pdf-download',
-        email,
-      }).toString();
-
-      await fetch('/__forms.html', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body,
-      });
-
-      setStatus('idle');
-      setEmail('');
-      onSuccess();
-    } catch {
-      setStatus('error');
-      setErrorMsg('Something went wrong. Please try again.');
+    const trimmed = email.trim();
+    if (!trimmed) {
+      setErrorMsg('Please enter a valid email.');
+      return;
     }
+
+    setStatus('submitting');
+    onSuccess(trimmed);
+    setStatus('idle');
+    setEmail('');
   };
+
+  const ButtonIcon = variant === 'pdf-download' ? Download : CheckCircle2;
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={onClose}>
+      <Dialog as="div" className={`relative ${zClass}`} onClose={onClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -70,7 +86,7 @@ export default function EmailModal({ isOpen, onClose, onSuccess }: EmailModalPro
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden glass-strong rounded-2xl p-6 text-left align-middle shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <Dialog.Title as="h3" className="text-xl font-bold text-white">
-                    Download Roadmap PDF
+                    {copy.title}
                   </Dialog.Title>
                   <button
                     onClick={onClose}
@@ -81,7 +97,7 @@ export default function EmailModal({ isOpen, onClose, onSuccess }: EmailModalPro
                 </div>
 
                 <p className="text-white/70 text-sm mb-6">
-                  Enter your email to download the Quantum Computing Roadmap 2026 as a PDF.
+                  {copy.description}
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -107,8 +123,8 @@ export default function EmailModal({ isOpen, onClose, onSuccess }: EmailModalPro
                     disabled={status === 'submitting'}
                     className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-white text-black rounded-lg hover:bg-white/90 transition-all font-medium text-sm shadow-[0_2px_8px_0_rgba(255,255,255,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Download size={16} />
-                    <span>{status === 'submitting' ? 'Processing...' : 'Download PDF'}</span>
+                    <ButtonIcon size={16} />
+                    <span>{status === 'submitting' ? 'Processing...' : copy.button}</span>
                   </button>
                 </form>
 
