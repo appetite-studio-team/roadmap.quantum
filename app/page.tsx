@@ -88,10 +88,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-black">
-      {/* Hidden form for Netlify build-time detection (Next.js SSR requirement) */}
-      <form name="pdf-download" data-netlify="true" hidden>
-        <input type="email" name="email" />
-      </form>
       <Script
         id="structured-data"
         type="application/ld+json"
