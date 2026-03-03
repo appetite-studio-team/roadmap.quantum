@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Linkedin, Download, Settings, MoreVertical } from 'lucide-react';
+import { Linkedin, Download, Settings, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 import { useProgress } from '@/context/ProgressContext';
 import { roadmapData } from '@/data/roadmap';
@@ -114,10 +114,10 @@ export default function Header({ onDownloadPDF }: HeaderProps) {
                 <button
                   onClick={() => setMenuOpen((o) => !o)}
                   className="text-white/70 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
-                  aria-label="More options"
+                  aria-label="Settings"
                   aria-expanded={menuOpen}
                 >
-                  <MoreVertical size={20} />
+                  <Settings size={20} />
                 </button>
                 {menuOpen && (
                   <div className="absolute right-0 top-full mt-1 py-1.5 w-52 rounded-xl glass-strong border border-white/20 shadow-lg z-50">
@@ -157,8 +157,8 @@ export default function Header({ onDownloadPDF }: HeaderProps) {
                       }}
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm text-white/90 hover:bg-white/10 transition-colors text-left"
                     >
-                      <Settings size={16} />
-                      Settings
+                      <RotateCcw size={16} />
+                      Reset progress
                     </button>
                     <div className="my-1 border-t border-white/10" />
                     <p className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-white/40 font-medium">
