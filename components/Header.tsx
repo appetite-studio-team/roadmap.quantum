@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Linkedin, Download, Settings, Share2 } from 'lucide-react';
+import { Linkedin, Download, Settings, MoreVertical } from 'lucide-react';
 import Link from 'next/link';
 import { useProgress } from '@/context/ProgressContext';
 import { roadmapData } from '@/data/roadmap';
@@ -31,17 +31,17 @@ const TOTAL_HOURS = getTotalHours();
 export default function Header({ onDownloadPDF }: HeaderProps) {
   const { completedCount, isCompleted } = useProgress();
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [shareOpen, setShareOpen] = useState(false);
-  const shareRef = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!shareOpen) return;
+    if (!menuOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
-      if (shareRef.current && !shareRef.current.contains(e.target as Node)) setShareOpen(false);
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [shareOpen]);
+  }, [menuOpen]);
 
   const percent = useMemo(() => Math.round((completedCount / TOTAL_TOPICS) * 100), [completedCount]);
   const completedHours = useMemo(() => {
@@ -73,62 +73,63 @@ export default function Header({ onDownloadPDF }: HeaderProps) {
               />
             </div>
 
-            {/* Center: Title + Progress */}
-            <div className="flex-1 flex flex-col items-center justify-center px-2">
-              <h1 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white text-center">
+            {/* Center: Title + compact progress */}
+            <div className="flex-1 flex flex-col items-center justify-center px-2 min-w-0">
+              <h1 className="text-sm sm:text-base md:text-lg font-bold text-white text-center truncate max-w-full">
                 <span className="hidden sm:inline">Quantum Computing Roadmap 2026</span>
                 <span className="sm:hidden">QC Roadmap 2026</span>
               </h1>
-            {completedCount > 0 && (
-              <div className="flex flex-col items-center gap-0.5 mt-0.5 w-full max-w-[220px] sm:max-w-xs">
-                <div className="flex items-center gap-2 w-full">
-                  <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
+              {completedCount > 0 && (
+                <div className="flex items-center gap-2 mt-1 w-full max-w-[200px] sm:max-w-[240px]">
+                  <div className="flex-1 min-w-0 h-1.5 rounded-full bg-white/10 overflow-hidden">
                     <div
                       className="h-full rounded-full bg-gradient-to-r from-purple-500 to-green-400 transition-all duration-500 ease-out"
                       style={{ width: `${percent}%` }}
                     />
                   </div>
-                  <span className="text-[10px] sm:text-xs text-white/50 font-medium tabular-nums whitespace-nowrap">
+                  <span className="text-[10px] sm:text-xs text-white/50 tabular-nums shrink-0">
                     {completedCount}/{TOTAL_TOPICS}
+                    {remainingHours > 0 && (
+                      <span className="text-white/40 ml-0.5">· {remainingHours}h left</span>
+                    )}
                   </span>
                 </div>
-                <span className="text-[10px] text-white/40 tabular-nums">
-                  {remainingHours > 0 ? `${remainingHours} h left` : 'Done'}
-                </span>
-              </div>
-            )}
+              )}
             </div>
 
-            {/* Right: Download, Settings, Social */}
-            <div className="flex items-center space-x-2 sm:space-x-3">
+            {/* Right: Download PDF + one menu (Share, Settings, Social) */}
+            <div className="flex items-center gap-1 sm:gap-2">
               {onDownloadPDF && (
                 <button
                   onClick={onDownloadPDF}
-                  className="flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white text-black rounded-lg hover:bg-white/90 transition-all font-medium text-xs sm:text-sm shadow-[0_2px_8px_0_rgba(255,255,255,0.3)]"
+                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 bg-white text-black rounded-lg hover:bg-white/90 transition-all font-medium text-xs sm:text-sm shadow-[0_2px_8px_0_rgba(255,255,255,0.3)]"
                   aria-label="Download PDF"
                 >
-                  <Download size={14} className="sm:w-4 sm:h-4" />
+                  <Download size={16} className="flex-shrink-0" />
                   <span className="hidden sm:inline">Download PDF</span>
                   <span className="sm:hidden">PDF</span>
                 </button>
               )}
-              <div className="relative" ref={shareRef}>
+              <div className="relative" ref={menuRef}>
                 <button
-                  onClick={() => setShareOpen((o) => !o)}
-                  className="text-white/80 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10"
-                  aria-label="Share"
-                  aria-expanded={shareOpen}
+                  onClick={() => setMenuOpen((o) => !o)}
+                  className="text-white/70 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
+                  aria-label="More options"
+                  aria-expanded={menuOpen}
                 >
-                  <Share2 size={18} className="sm:w-5 sm:h-5" />
+                  <MoreVertical size={20} />
                 </button>
-                {shareOpen && (
-                  <div className="absolute right-0 top-full mt-1 py-1 w-44 rounded-lg glass-strong border border-white/20 shadow-lg z-50">
+                {menuOpen && (
+                  <div className="absolute right-0 top-full mt-1 py-1.5 w-52 rounded-xl glass-strong border border-white/20 shadow-lg z-50">
+                    <p className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-white/40 font-medium">
+                      Share
+                    </p>
                     <a
                       href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(SHARE_TEXT)}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : 'https://roadmap.quantumx.com')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 px-3 py-2 text-sm text-white/90 hover:bg-white/10 transition-colors"
-                      onClick={() => setShareOpen(false)}
+                      onClick={() => setMenuOpen(false)}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -143,45 +144,54 @@ export default function Header({ onDownloadPDF }: HeaderProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 px-3 py-2 text-sm text-white/90 hover:bg-white/10 transition-colors"
-                      onClick={() => setShareOpen(false)}
+                      onClick={() => setMenuOpen(false)}
                     >
                       <Linkedin size={16} />
                       Share on LinkedIn
                     </a>
+                    <div className="my-1 border-t border-white/10" />
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false);
+                        setSettingsOpen(true);
+                      }}
+                      className="flex items-center gap-2 w-full px-3 py-2 text-sm text-white/90 hover:bg-white/10 transition-colors text-left"
+                    >
+                      <Settings size={16} />
+                      Settings
+                    </button>
+                    <div className="my-1 border-t border-white/10" />
+                    <p className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-white/40 font-medium">
+                      Follow
+                    </p>
+                    <Link
+                      href="https://x.com/_Quantum_X_"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-white/90 hover:bg-white/10 transition-colors"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/images/twitter.png"
+                        alt=""
+                        className="w-4 h-4 object-contain brightness-0 invert"
+                      />
+                      X (Twitter)
+                    </Link>
+                    <Link
+                      href="https://www.linkedin.com/company/quantumx-foundation"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-white/90 hover:bg-white/10 transition-colors"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <Linkedin size={16} />
+                      LinkedIn
+                    </Link>
                   </div>
                 )}
               </div>
-              <button
-                onClick={() => setSettingsOpen(true)}
-                className="text-white/80 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10"
-                aria-label="Settings"
-              >
-                <Settings size={18} className="sm:w-5 sm:h-5" />
-              </button>
-              <Link
-                href="https://x.com/_Quantum_X_"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/80 hover:text-white transition-colors flex items-center"
-                aria-label="X (formerly Twitter)"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/twitter.png"
-                  alt="X (formerly Twitter)"
-                  className="w-[18px] h-[18px] sm:w-5 sm:h-5 object-contain brightness-0 invert"
-                  loading="eager"
-                />
-              </Link>
-              <Link
-                href="https://www.linkedin.com/company/quantumx-foundation"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/80 hover:text-white transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin size={18} className="sm:w-5 sm:h-5" />
-              </Link>
             </div>
           </div>
         </div>
