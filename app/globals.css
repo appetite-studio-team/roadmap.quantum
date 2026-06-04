@@ -51,6 +51,18 @@ body {
     background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.25);
   }
+
+  @keyframes banner-shimmer {
+    0%,
+    100% {
+      transform: translateX(-30%);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translateX(130%);
+      opacity: 0.85;
+    }
+  }
 }
 
 /* Background texture pattern - dark futuristic */
