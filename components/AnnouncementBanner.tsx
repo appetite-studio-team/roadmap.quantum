@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 /** Edit copy and CTA per deployment */
 const BRAND_NAME = 'QuantumX School';
-const ANNOUNCEMENT_MESSAGE = 'June cohort about to start, register today';
-const SHORT_MOBILE_MESSAGE = 'June cohort starting — register today';
+const ANNOUNCEMENT_MESSAGE = 'July cohort about to start, register today';
+const SHORT_MOBILE_MESSAGE = 'July cohort starting — register today';
 const CTA_LABEL = 'Register';
 const CTA_URL = 'https://quantumx.school/';
 
