@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
-import AnnouncementBanner from "@/components/AnnouncementBanner";
 import PWAInstall from "@/components/PWAInstall";
 
 const GA_ID = "G-392XQM7Y2Q";
@@ -110,8 +109,7 @@ export default function RootLayout({
           {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
         </Script>
       </head>
-      <body className="antialiased dark bg-black text-white pt-10">
-        <AnnouncementBanner />
+      <body className="antialiased dark bg-black text-white">
         {children}
         <PWAInstall />
       </body>
