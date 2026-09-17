@@ -86,3 +86,14 @@ body {
   z-index: 0;
 }
 
+/* Announcement banner height. The banner measures itself and overwrites this
+   on mount; these are the first-paint estimates (two lines of copy on narrow
+   screens, one line on wide ones). */
+:root {
+  --qx-banner-h: 48px;
+}
+@media (min-width: 900px) {
+  :root {
+    --qx-banner-h: 40px;
+  }
+}

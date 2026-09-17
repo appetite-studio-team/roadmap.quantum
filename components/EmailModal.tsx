@@ -32,7 +32,7 @@ export default function EmailModal({
   onClose,
   onSuccess,
   variant = 'pdf-download',
-  zClass = 'z-50',
+  zClass = 'z-[10010]',
 }: EmailModalProps) {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting'>('idle');

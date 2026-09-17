@@ -59,7 +59,10 @@ export default function Header({ onDownloadPDF }: HeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 glass-strong border-b border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-xl">
+      <header
+      className="sticky z-50 glass-strong border-b border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-xl"
+      style={{ top: 'var(--qx-banner-h, 48px)' }}
+    >
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Left: Logo */}

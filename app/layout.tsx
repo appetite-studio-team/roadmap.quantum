@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 import PWAInstall from "@/components/PWAInstall";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 
 const GA_ID = "G-392XQM7Y2Q";
 
@@ -110,6 +111,10 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="antialiased dark bg-black text-white">
+        {/* Fixed to the viewport, so the spacer reserves the height it
+            covers and the sticky header below sits just under it. */}
+        <AnnouncementBanner />
+        <div style={{ height: "var(--qx-banner-h, 48px)" }} aria-hidden />
         {children}
         <PWAInstall />
       </body>
